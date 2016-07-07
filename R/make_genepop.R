@@ -21,7 +21,7 @@
 make_genepop <- function(x) {
     x <- x[-c(1,3)]
     colnames(x)[1] <- "POP"
-    x[1] <- "1,"
+    x[1] <- "pop1,"
 
     # get locus names
     loci <- matrix(c(colnames(x)[-1],colnames(x[1])))
