@@ -9,7 +9,8 @@ Description: mix of functions to load data, create files for abc etc.
 Depends:
     R (>= 3.2.3)
 Imports:
-    readxl
+    readxl,
+    stringr
 License: GPL (>= 2)
 LazyData: TRUE
 RoxygenNote: 5.0.1
