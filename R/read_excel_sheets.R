@@ -6,7 +6,7 @@
 #'
 #' @param data_path path to excel file with multiple data.frames
 #'
-#'
+#' @export
 
 
 read_excel_sheets <- function(data_path) {
