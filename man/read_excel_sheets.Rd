@@ -2,8 +2,7 @@
 % Please edit documentation in R/read_excel_sheets.R
 \name{read_excel_sheets}
 \alias{read_excel_sheets}
-\title{loads multiple data frames into list from xlsx and assigns the
-tab names from the spreadsheet to the list elements}
+\title{read multiple excel sheets}
 \usage{
 read_excel_sheets(data_path)
 }
