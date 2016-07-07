@@ -1,0 +1,15 @@
+Package: sealABC
+Type: Package
+Title: useful functions for the abc pinniped analysis
+Version: 0.1.0
+Author: person("Martin", "Stoffel", email = "martin.adam.stoffel@gmail.com",
+    role = c("aut", "cre"))
+Maintainer: Martin Stoffel <martin.adam.stoffel@gmail.com>
+Description: mix of functions to load data, create files for abc etc.
+Depends:
+    R (>= 3.2.3)
+Imports:
+    readxl
+License: GPL (>= 2)
+LazyData: TRUE
+RoxygenNote: 5.0.1
