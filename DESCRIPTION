@@ -10,7 +10,9 @@ Depends:
     R (>= 3.2.3)
 Imports:
     readxl,
-    stringr
+    stringr,
+    splitstackshape,
+    strataG
 License: GPL (>= 2)
 LazyData: TRUE
 RoxygenNote: 5.0.1
