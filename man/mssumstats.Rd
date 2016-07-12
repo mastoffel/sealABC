@@ -4,7 +4,12 @@
 \alias{mssumstats}
 \title{takes output from microsimr and outputs summary statistics}
 \usage{
-mssumstats(simd_data)
+mssumstats(simd_data, type = c("microsimr", "microsats"))
+}
+\arguments{
+\item{simd_data}{output from microsimr}
+
+\item{type}{"microsimr" for microsimr output, "microsats" for allelic microsatellite format}
 }
 \description{
 takes output from microsimr and outputs summary statistics

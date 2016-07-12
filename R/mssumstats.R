@@ -1,12 +1,12 @@
 #' takes output from microsimr and outputs summary statistics
 #'
 #' @param simd_data output from microsimr
-#' @param out_var if TRUE, also outputs the variance of the summary statistics
+#' @param type "microsimr" for microsimr output, "microsats" for allelic microsatellite format
 #'
 #' @example
 #'
 #'
-#' out <- mssumstats(microsimr_data)
+#'
 #'
 #'
 #' @export
@@ -14,12 +14,17 @@
 #'
 
 
-mssumstats <- function(simd_data) {
+mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
 
-    # reshape a little bit
-    simd_data <- simd_data[-c(1:2)]
-    # genotypes <- splitstackshape::cSplit_f(simd_data, splitCols = names(simd_data), sep = "|")
-    genotypes <- splitstackshape::cSplit(simd_data, splitCols = names(simd_data), sep = ".")
+    if (type == "microsimr") {
+        # reshape a little bit
+        simd_data <- simd_data[-c(1:2)]
+        # genotypes <- splitstackshape::cSplit_f(simd_data, splitCols = names(simd_data), sep = "|")
+        genotypes <- splitstackshape::cSplit(simd_data, splitCols = names(simd_data), sep = ".")
+    } else {
+        genotypes <- simd_data
+    }
+
 
     g_types_geno <- strataG::df2gtypes(genotypes, ploidy = 2, id.col = NULL, strata.col = NULL,
                                        loc.col = 1)
