@@ -21,7 +21,7 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
         simd_data <- simd_data[-c(1:2)]
         # genotypes <- splitstackshape::cSplit_f(simd_data, splitCols = names(simd_data), sep = "|")
         genotypes <- splitstackshape::cSplit(simd_data, splitCols = names(simd_data), sep = ".")
-    } else {
+    } else if (type == "microsats") {
         genotypes <- simd_data
     }
 
