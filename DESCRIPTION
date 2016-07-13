@@ -7,7 +7,7 @@ Author: person("Martin", "Stoffel", email = "martin.adam.stoffel@gmail.com",
 Maintainer: Martin Stoffel <martin.adam.stoffel@gmail.com>
 Description: mix of functions to load data, create files for abc etc.
 Depends:
-    R (>= 3.2.3)
+    R (>= 3.2.1)
 Imports:
     readxl,
     stringr,

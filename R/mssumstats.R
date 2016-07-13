@@ -13,7 +13,6 @@
 #'
 #'
 
-
 mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
 
     if (type == "microsimr") {
