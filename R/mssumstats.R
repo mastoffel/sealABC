@@ -51,6 +51,10 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
     mean_allele_range <- mean(allele_range_size[2, ], na.rm = TRUE)
     sd_allele_range <- sd(allele_range_size[2, ], na.rm = TRUE)
 
+    # measure similar to mRatio
+    mratio <-  num_alleles / allele_range_size[2, ]
+    mratio_mean <- mean(mratio, na.rm = TRUE)
+    mratio_sd <- sd(mratio, na.rm = TRUE)
 
     # expected heterozygosity
     exp_het <- strataG::exptdHet(g_types_geno)
@@ -68,7 +72,8 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
         mean_allele_size_sd = mean_allele_size_sd, sd_allele_size_sd = sd_allele_size_sd,
         mean_allele_range = mean_allele_range, sd_allele_range,
         exp_het_mean = exp_het_mean,  exp_het_sd =  exp_het_sd,
-        obs_het_mean = obs_het_mean,  obs_het_sd =  obs_het_sd)
+        obs_het_mean = obs_het_mean,  obs_het_sd =  obs_het_sd,
+        mratio_mean, mratio_sd)
 
     out
 
