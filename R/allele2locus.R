@@ -8,7 +8,7 @@
 #'
 #'
 #' @param genotypes microsatellite data.frame in allelic format (two columns per locus).
-#' @param sep how should the two alleles be concatenated? (defaults to "")
+#' @param sep_alleles how should the two alleles be concatenated? (defaults to "")
 #'
 #' @author Martin Stoffel (martin.adam.stoffel@@gmail.com)
 #'
@@ -16,7 +16,7 @@
 #'
 #'
 #'
-allele2locus <- function(genotypes, sep = "") {
+allele2locus <- function(genotypes, sep_alleles= "") {
 
     # one column per locus
     short_geno <- matrix(nrow = nrow(genotypes), ncol = ncol(genotypes) / 2)
@@ -25,7 +25,7 @@ allele2locus <- function(genotypes, sep = "") {
     genotypes <- data.frame(genotypes, stringsAsFactors = FALSE)
     col_num <- 1
     for (i in seq(from = 1, to = length_data, by = 2)) {
-        short_geno[col_num] <- paste0(genotypes[[i]], sep, genotypes[[i+1]])
+        short_geno[col_num] <- paste0(genotypes[[i]], sep_alleles, genotypes[[i+1]])
         col_num <- col_num + 1
     }
 
