@@ -19,7 +19,7 @@ write_dflist_to_xls <- function(dflist, file_name){
         assign(species, dfs[[species]], envir)
     }
 
-    lapply(names(all_seals_new), list_to_df, all_seals_new, envir)
+    lapply(names(dflist), list_to_df, dflist, envir)
     WriteXLS::WriteXLS(names(all_seals_new), ExcelFileName = "file_name")
 
 }
