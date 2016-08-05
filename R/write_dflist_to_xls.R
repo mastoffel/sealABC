@@ -20,7 +20,7 @@ write_dflist_to_xls <- function(dflist, file_name){
     }
 
     lapply(names(dflist), list_to_df, dflist, envir)
-    WriteXLS::WriteXLS(names(dflist), ExcelFileName = "file_name")
+    WriteXLS::WriteXLS(names(dflist), ExcelFileName = file_name)
 
 }
 
