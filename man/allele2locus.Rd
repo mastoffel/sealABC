@@ -4,12 +4,12 @@
 \alias{allele2locus}
 \title{format microsat data from allelic to locus format}
 \usage{
-allele2locus(genotypes, sep = "")
+allele2locus(genotypes, sep_alleles = "")
 }
 \arguments{
 \item{genotypes}{microsatellite data.frame in allelic format (two columns per locus).}
 
-\item{sep}{how should the two alleles be concatenated? (defaults to "")}
+\item{sep_alleles}{how should the two alleles be concatenated? (defaults to "")}
 }
 \description{
 format microsat data from allelic to locus format

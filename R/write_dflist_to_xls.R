@@ -1,7 +1,7 @@
 #' takes list of named data.frames and writes to xls with respective names as sheet names
 #'
-#' @param simd_data output from microsimr
-#' @param type "microsimr" for microsimr output, "microsats" for allelic microsatellite format
+#' @param dflist  list of named data.frames
+#' @param file_name file name for xls file
 #'
 #'
 #'
