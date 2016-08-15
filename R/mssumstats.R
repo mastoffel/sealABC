@@ -5,8 +5,8 @@
 #'
 #' @example
 #'
-#'
-#'
+#' data(microsat_data)
+#' mssumstats(microsat_data)
 #'
 #'
 #' @export
@@ -15,6 +15,7 @@
 
 mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
 
+    if (length(type) == 2) type <- type[1]
     if (type == "microsimr") {
         # reshape a little bit
         simd_data <- simd_data[-c(1:2)]
@@ -66,6 +67,12 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
     obs_het_mean <- mean(obs_het, na.rm = TRUE)
     obs_het_sd <- sd(obs_het, na.rm = TRUE)
 
+    # identity disequilibrium
+    g2 <- inbreedR::g2_microsats(inbreedR::convert_raw(genotypes))$g2
+
+    # het excess
+    het_exc <- (exp_het - obs_het) < 0
+    het_excess <- sum(het_exc) / length(het_exc)
 
     out <- data.frame(
         num_alleles_mean = num_alleles_mean, num_alleles_sd = num_alleles_sd,
@@ -73,7 +80,7 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
         mean_allele_range = mean_allele_range, sd_allele_range,
         exp_het_mean = exp_het_mean,  exp_het_sd =  exp_het_sd,
         obs_het_mean = obs_het_mean,  obs_het_sd =  obs_het_sd,
-        mratio_mean, mratio_sd)
+        mratio_mean, mratio_sd, g2, het_excess)
 
     out
 

@@ -13,7 +13,8 @@ Imports:
     stringr,
     splitstackshape,
     strataG,
-    WriteXLS
+    WriteXLS,
+    inbreedR
 License: GPL (>= 2)
 LazyData: TRUE
 RoxygenNote: 5.0.1
