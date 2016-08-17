@@ -34,53 +34,55 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
     # number of alleles across loci
     num_alleles <- strataG::numAlleles(g_types_geno)
     num_alleles_mean <- mean(num_alleles, na.rm = TRUE)
-    num_alleles_sd <- sd(num_alleles, na.rm = TRUE)
+    num_alleles_sd <- stats::sd(num_alleles, na.rm = TRUE)
 
-    # allele size variance (actually, sd) across loci
-    # and allelic range
-    allele_range_size <- sapply(seq(from = 1, to = ncol(genotypes), by = 2),
-        function(x) {
-            allele_sd <- sd(unlist(genotypes[x:(x+1)]), na.rm = TRUE)
-            allele_range <- range(unlist(genotypes[x:(x+1)]), na.rm = TRUE)
-            allele_range <- abs(allele_range[1] - allele_range[2])
-            out <- c(allele_sd, allele_range)
-            })
 
-    mean_allele_size_sd <- mean(allele_range_size[1, ], na.rm = TRUE)
-    sd_allele_size_sd <- sd(allele_range_size[1, ], na.rm = TRUE)
+     # mean allele size variance across loci
 
-    mean_allele_range <- mean(allele_range_size[2, ], na.rm = TRUE)
-    sd_allele_range <- sd(allele_range_size[2, ], na.rm = TRUE)
+    calc_ranges <- function(x){
+        geno <- unlist(genotypes[x:(x+1)])
+        allele_size_var <- stats::var(geno, na.rm = TRUE)
+        allele_range <- range(geno, na.rm = TRUE)
+        allele_range <- abs(allele_range[1] - allele_range[2])
+        out <- c(allele_size_var, allele_range)
+    }
+
+    allele_stats <- vapply(seq(from = 1, to = ncol(genotypes), by = 2), calc_ranges, numeric(2))
+
+    mean_allele_size_var <- mean(allele_stats[1, ], na.rm = TRUE)
+    sd_allele_size_var <- stats::sd(allele_stats[1, ], na.rm = TRUE)
+
+    mean_allele_range <- mean(allele_stats[2, ], na.rm = TRUE)
+    sd_allele_range <- stats::sd(allele_stats[2, ], na.rm = TRUE)
 
     # measure similar to mRatio
-    mratio <-  num_alleles / allele_range_size[2, ]
+    mratio <-  num_alleles / allele_stats[2, ]
     mratio_mean <- mean(mratio, na.rm = TRUE)
-    mratio_sd <- sd(mratio, na.rm = TRUE)
+    mratio_sd <- stats::sd(mratio, na.rm = TRUE)
 
     # expected heterozygosity
     exp_het <- strataG::exptdHet(g_types_geno)
     exp_het_mean <- mean(exp_het, na.rm = TRUE)
-    exp_het_sd<- sd(exp_het, na.rm = TRUE)
+    exp_het_sd<- stats::sd(exp_het, na.rm = TRUE)
 
     # observed heterozygosity
     obs_het <- strataG::obsvdHet(g_types_geno)
     obs_het_mean <- mean(obs_het, na.rm = TRUE)
-    obs_het_sd <- sd(obs_het, na.rm = TRUE)
+    obs_het_sd <- stats::sd(obs_het, na.rm = TRUE)
 
     # identity disequilibrium
-    g2 <- inbreedR::g2_microsats(inbreedR::convert_raw(genotypes))$g2
+    # g2 <- inbreedR::g2_microsats(inbreedR::convert_raw(genotypes))$g2
 
     # het excess
     het_exc <- (exp_het - obs_het) < 0
     het_excess <- sum(het_exc) / length(het_exc)
 
-    out <- data.frame(
-        num_alleles_mean = num_alleles_mean, num_alleles_sd = num_alleles_sd,
-        mean_allele_size_sd = mean_allele_size_sd, sd_allele_size_sd = sd_allele_size_sd,
-        mean_allele_range = mean_allele_range, sd_allele_range,
-        exp_het_mean = exp_het_mean,  exp_het_sd =  exp_het_sd,
-        obs_het_mean = obs_het_mean,  obs_het_sd =  obs_het_sd,
-        mratio_mean, mratio_sd, g2, het_excess)
+    out <- data.frame(num_alleles_mean, num_alleles_sd,
+        mean_allele_size_var,  sd_allele_size_var,
+        mean_allele_range, sd_allele_range,
+        exp_het_mean, exp_het_sd,
+        obs_het_mean,  obs_het_sd,
+        mratio_mean, mratio_sd, het_excess)
 
     out
 
