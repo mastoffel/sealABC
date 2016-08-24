@@ -41,7 +41,7 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
 
     calc_ranges <- function(x){
         geno <- unlist(genotypes[x:(x+1)])
-        allele_size_var <- stats::var(geno, na.rm = TRUE)
+        allele_size_var <- stats::sd(geno, na.rm = TRUE)
         allele_range <- range(geno, na.rm = TRUE)
         allele_range <- abs(allele_range[1] - allele_range[2])
         out <- c(allele_size_var, allele_range)
