@@ -57,6 +57,7 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
 
     # measure similar to mRatio
     mratio <-  num_alleles / allele_stats[2, ]
+    mratio[is.infinite(mratio)] <- NA
     mratio_mean <- mean(mratio, na.rm = TRUE)
     mratio_sd <- stats::sd(mratio, na.rm = TRUE)
 
