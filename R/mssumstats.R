@@ -2,6 +2,7 @@
 #'
 #' @param simd_data output from microsimr
 #' @param type "microsimr" for microsimr output, "microsats" for allelic microsatellite format
+#' @param data_type if "empirical", the mratio will be calculated differently
 #'
 #' @example
 #'
@@ -13,7 +14,7 @@
 #'
 #'
 
-mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
+mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type = NULL) {
 
     if (length(type) == 2) type <- type[1]
     if (type == "microsimr") {
@@ -56,10 +57,19 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats")) {
     sd_allele_range <- stats::sd(allele_stats[2, ], na.rm = TRUE)
 
     # measure similar to mRatio
-    mratio <-  num_alleles / allele_stats[2, ]
-    mratio[is.infinite(mratio)] <- NA
-    mratio_mean <- mean(mratio, na.rm = TRUE)
-    mratio_sd <- stats::sd(mratio, na.rm = TRUE)
+    if (is.null(data_type)) {
+        mratio <-  num_alleles / allele_stats[2, ]
+        mratio[is.infinite(mratio)] <- NA
+        mratio_mean <- mean(mratio, na.rm = TRUE)
+        mratio_sd <- stats::sd(mratio, na.rm = TRUE)
+    } else if (data_type == "empirical") {
+        mratio <- strataG::mRatio(g_types_geno)
+        mratio_mean <- mean(mratio, na.rm = TRUE)
+        mratio_sd <- stats::sd(mratio, na.rm = TRUE)
+    } else {
+        stop("specify data_type = NULL or 'empirical' ")
+    }
+
 
     # expected heterozygosity
     exp_het <- strataG::exptdHet(g_types_geno)
