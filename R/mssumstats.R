@@ -14,9 +14,10 @@
 #'
 #'
 
-mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type = NULL) {
+mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type = c("simulated", "empirical")) {
 
     if (length(type) == 2) type <- type[1]
+    if (length(data_type) == 2)data_type  <- data_type[1]
     if (type == "microsimr") {
         # reshape a little bit
         simd_data <- simd_data[-c(1:2)]
@@ -26,20 +27,16 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
         genotypes <- simd_data
     }
 
-
-    g_types_geno <- strataG::df2gtypes(genotypes, ploidy = 2, id.col = NULL, strata.col = NULL,
-                                       loc.col = 1)
+    # transform to gyptes object
+    g_types_geno <- strataG::df2gtypes(genotypes, ploidy = 2, id.col = NULL, strata.col = NULL, loc.col = 1)
 
     # summary statistics
-    # according to DIYabc
     # number of alleles across loci
     num_alleles <- strataG::numAlleles(g_types_geno)
     num_alleles_mean <- mean(num_alleles, na.rm = TRUE)
     num_alleles_sd <- stats::sd(num_alleles, na.rm = TRUE)
 
-
      # mean allele size variance across loci
-
     calc_ranges <- function(x){
         geno <- unlist(genotypes[x:(x+1)])
         allele_size_var <- stats::sd(geno, na.rm = TRUE)
@@ -56,20 +53,20 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
     mean_allele_range <- mean(allele_stats[2, ], na.rm = TRUE)
     sd_allele_range <- stats::sd(allele_stats[2, ], na.rm = TRUE)
 
+
     # measure similar to mRatio
-    if (is.null(data_type)) {
+    if (data_type == "simulated") {
         mratio <-  num_alleles / allele_stats[2, ]
         mratio[is.infinite(mratio)] <- NA
         mratio_mean <- mean(mratio, na.rm = TRUE)
         mratio_sd <- stats::sd(mratio, na.rm = TRUE)
     } else if (data_type == "empirical") {
-        mratio <- strataG::mRatio(g_types_geno)
+        mratio <- m_ratio(g_types_geno)
         mratio_mean <- mean(mratio, na.rm = TRUE)
         mratio_sd <- stats::sd(mratio, na.rm = TRUE)
     } else {
         stop("specify data_type = NULL or 'empirical' ")
     }
-
 
     # expected heterozygosity
     exp_het <- strataG::exptdHet(g_types_geno)
@@ -81,8 +78,17 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
     obs_het_mean <- mean(obs_het, na.rm = TRUE)
     obs_het_sd <- stats::sd(obs_het, na.rm = TRUE)
 
-    # identity disequilibrium
-    # g2 <- inbreedR::g2_microsats(inbreedR::convert_raw(genotypes))$g2
+    # prop low allele freq
+    afs <- strataG::alleleFreqs(g_types_geno)
+    # calculate proportion fo low frequency alleles for one locus
+    prop_low_af <- function(afs){
+        low_afs <- (afs[, "freq"] / sum(afs[, "freq"])) < 0.05
+        prop_low <- sum(low_afs) / length(low_afs)
+    }
+    # and mean for all
+    prop_low_afs <- unlist(lapply(afs, prop_low_af))
+    prop_low_afs_mean <- mean(prop_low_afs, na.rm = TRUE)
+    prop_low_afs_sd <- sd(prop_low_afs, na.rm = TRUE)
 
     # het excess
     het_exc <- (exp_het - obs_het) < 0
@@ -93,7 +99,9 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
         mean_allele_range, sd_allele_range,
         exp_het_mean, exp_het_sd,
         obs_het_mean,  obs_het_sd,
-        mratio_mean, mratio_sd, het_excess)
+        mratio_mean, mratio_sd,
+        prop_low_afs_mean,  prop_low_afs_sd,
+        het_excess)
 
     out
 
