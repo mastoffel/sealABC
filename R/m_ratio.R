@@ -66,7 +66,7 @@ m_ratio <- function(gtypes_geno, rpt_size = 8:2){
             smallest <- sizes[which.min(sizes[freqs > 0])]
             largest <- sizes[which.max(sizes[freqs > 0])]
             n <- (largest - smallest)/r
-            sum(freqs > 0)/(n)
+            sum(freqs > 0)/(n + 1)
         }
     }
     freqs <- strataG::alleleFreqs(gtypes_geno, by.strata = FALSE)
