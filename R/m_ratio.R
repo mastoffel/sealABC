@@ -43,14 +43,12 @@ m_ratio <- function(gtypes_geno, rpt_size = 8:2){
             size_diff <- diff(sizes)
 
             rpt_found <- FALSE
-            all_rpts <- sort(rpt_size, decreasing = TRUE)
-            for (r in  all_rpts) {
-
-                if (!exists("all_possible")) {
-                    all_possible <-  size_diff%%r == 0
-                } else {
-                    all_possible <- rbind(all_possible,  size_diff%%r == 0)
-                }
+            all_rpts <- sort(rpt_size, decreasing = FALSE)
+            all_possible <- matrix(data = NA, nrow = length(rpt_size), ncol = length(size_diff))
+            count <- 1
+            for (r in all_rpts) {
+                all_possible[count, ] <- size_diff%%r == 0
+                count <- count + 1
 
                 if (all(size_diff%%r == 0)) {
                     rpt_found <- TRUE
@@ -65,18 +63,10 @@ m_ratio <- function(gtypes_geno, rpt_size = 8:2){
                 r <- all_rpts[which.max(rowSums(all_possible))]
             }
 
-
-            # calc_mode <- function(x) {
-            #     ux <- unique(x)
-            #     ux[which.max(tabulate(match(x, ux)))]
-            # }
-            #
-            # mode_af <- calc_mode(size_diff)
-
             smallest <- sizes[which.min(sizes[freqs > 0])]
             largest <- sizes[which.max(sizes[freqs > 0])]
             n <- (largest - smallest)/r
-            sum(freqs > 0)/(n + 1)
+            sum(freqs > 0)/(n)
         }
     }
     freqs <- strataG::alleleFreqs(gtypes_geno, by.strata = FALSE)
