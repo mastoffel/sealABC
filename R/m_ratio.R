@@ -15,7 +15,7 @@
 #'
 
 
-m_ratio <- function(gtypes_geno){
+m_ratio <- function(gtypes_geno, rpt_size = 8:2){
 
     calc_mratio <- function(freqs) {
         freqs <- freqs[, 1]
@@ -33,8 +33,8 @@ m_ratio <- function(gtypes_geno){
             NA
         }
 
-        if (is.null(afs)){
-            afs <- strataG::alleleFreqs(gtypes_geno)
+        if (is.null(freqs)){
+            freqs <- strataG::alleleFreqs(gtypes_geno)
         }
 
         else {
@@ -42,22 +42,44 @@ m_ratio <- function(gtypes_geno){
             sizes <- as.numeric(names(freqs))
             size_diff <- diff(sizes)
 
-            # instead of checking whether all alleles stick to a certain repeat size, calculate the
-            # mode as a proxy
-            calc_mode <- function(x) {
-                ux <- unique(x)
-                ux[which.max(tabulate(match(x, ux)))]
+            rpt_found <- FALSE
+            all_rpts <- sort(rpt_size, decreasing = TRUE)
+            for (r in  all_rpts) {
+
+                if (!exists("all_possible")) {
+                    all_possible <-  size_diff%%r == 0
+                } else {
+                    all_possible <- rbind(all_possible,  size_diff%%r == 0)
+                }
+
+                if (all(size_diff%%r == 0)) {
+                    rpt_found <- TRUE
+                    break
+                }
             }
 
-            mode_af <- calc_mode(size_diff)
+            # instead of checking whether all alleles stick to a certain repeat size take the most
+            # common repeat size as a divident
+
+            if (!(rpt_found)) {
+                r <- all_rpts[which.max(rowSums(all_possible))]
+            }
+
+
+            # calc_mode <- function(x) {
+            #     ux <- unique(x)
+            #     ux[which.max(tabulate(match(x, ux)))]
+            # }
+            #
+            # mode_af <- calc_mode(size_diff)
 
             smallest <- sizes[which.min(sizes[freqs > 0])]
             largest <- sizes[which.max(sizes[freqs > 0])]
-            n <- (largest - smallest)/mode_af
+            n <- (largest - smallest)/r
             sum(freqs > 0)/(n + 1)
         }
     }
-    freqs <- alleleFreqs(gtypes_geno, by.strata = FALSE)
+    freqs <- strataG::alleleFreqs(gtypes_geno, by.strata = FALSE)
     out <- sapply(freqs, calc_mratio)
 
 }
