@@ -73,9 +73,9 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
     }
 
     #allelic richness
-    AR <- allelicRichness(g_types_geno)
-    AR_mean <- mean(AR, na.rm = TRUE)
-    AR_sd <- sd(AR, na.rm = TRUE)
+    # AR <- strataG::allelicRichness(g_types_geno)
+    # AR_mean <- mean(AR, na.rm = TRUE)
+    # AR_sd <- sd(AR, na.rm = TRUE)
 
     # expected heterozygosity
     exp_het <- strataG::exptdHet(g_types_geno)
@@ -110,7 +110,6 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
         obs_het_mean,  obs_het_sd,
         mratio_mean, mratio_sd,
         prop_low_afs_mean,  prop_low_afs_sd,
-        AR_mean, AR_sd,
         het_excess)
 
     out
