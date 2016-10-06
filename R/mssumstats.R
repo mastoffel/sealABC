@@ -60,13 +60,22 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
         mratio[is.infinite(mratio)] <- NA
         mratio_mean <- mean(mratio, na.rm = TRUE)
         mratio_sd <- stats::sd(mratio, na.rm = TRUE)
+
+        allel_rich <- NA
     } else if (data_type == "empirical") {
         mratio <- m_ratio(g_types_geno)
+        mratio <- mratio[mratio != 1] # not sure if makes sense
         mratio_mean <- mean(mratio, na.rm = TRUE)
         mratio_sd <- stats::sd(mratio, na.rm = TRUE)
+
     } else {
         stop("specify data_type = NULL or 'empirical' ")
     }
+
+    #allelic richness
+    AR <- allelicRichness(g_types_geno)
+    AR_mean <- mean(AR, na.rm = TRUE)
+    AR_sd <- sd(AR, na.rm = TRUE)
 
     # expected heterozygosity
     exp_het <- strataG::exptdHet(g_types_geno)
@@ -101,6 +110,7 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
         obs_het_mean,  obs_het_sd,
         mratio_mean, mratio_sd,
         prop_low_afs_mean,  prop_low_afs_sd,
+        AR_mean, AR_sd,
         het_excess)
 
     out

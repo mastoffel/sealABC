@@ -24,6 +24,10 @@ m_ratio <- function(gtypes_geno, rpt_size = 8:2){
             warning("only one allele")
             return(NA)
         }
+
+        # if (length(freqs) <= 3) {
+        #     return(NA)
+        # }
         # if (!all.is.numeric(names(freqs))) {
         #     warning("allele names are non-numeric")
         #     return(NA)
