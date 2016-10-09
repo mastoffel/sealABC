@@ -36,6 +36,8 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
     num_alleles_mean <- mean(num_alleles, na.rm = TRUE)
     num_alleles_sd <- stats::sd(num_alleles, na.rm = TRUE)
 
+   # AR <- num_alleles_mean / log(nrow(genotypes))
+
      # mean allele size variance across loci
     calc_ranges <- function(x){
         geno <- unlist(genotypes[x:(x+1)])
@@ -89,6 +91,10 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
 
     # prop low allele freq
     afs <- strataG::alleleFreqs(g_types_geno)
+
+    # # allele frequency variation
+    # afs_sd <- mean(unlist(lapply(afs, function(x) sd(x, na.rm = TRUE))), na.rm = TRUE)
+
     # calculate proportion fo low frequency alleles for one locus
     prop_low_af <- function(afs){
         low_afs <- (afs[, "freq"] / sum(afs[, "freq"])) < 0.05
