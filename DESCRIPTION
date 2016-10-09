@@ -14,8 +14,7 @@ Imports:
     splitstackshape,
     strataG,
     WriteXLS,
-    inbreedR,
-    PopGenReport
+    inbreedR
 License: GPL (>= 2)
 LazyData: TRUE
 RoxygenNote: 5.0.1
