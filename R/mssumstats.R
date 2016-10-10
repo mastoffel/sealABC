@@ -66,7 +66,7 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
         allel_rich <- NA
     } else if (data_type == "empirical") {
         mratio <- m_ratio(g_types_geno)
-        mratio <- mratio[mratio != 1] # not sure if makes sense
+       # mratio <- mratio[mratio != 1] # not sure if makes sense
         mratio_mean <- mean(mratio, na.rm = TRUE)
         mratio_sd <- stats::sd(mratio, na.rm = TRUE)
 
