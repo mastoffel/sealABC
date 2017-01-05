@@ -2,19 +2,22 @@
 #'
 #' @param simd_data output from microsimr
 #' @param type "microsimr" for microsimr output, "microsats" for allelic microsatellite format
-#' @param data_type if "empirical", the mratio will be calculated differently
+#' @param data_type if "empirical", the mratio will be calculated differently, see ?m_ratio
+#' @param rarefaction if TRUE, calculates mean and sd number of alleles as mean of n_samp individuals and n_loc loci over n_boot bootstraps
 #'
 #' @example
 #'
 #' data(microsat_data)
 #' mssumstats(microsat_data)
+#' mssumstats(microsat_data, rarefaction = TRUE, nsamp = 10, nloc = 5, nboot = 1000)
 #'
 #'
 #' @export
 #'
 #'
 
-mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type = c("simulated", "empirical")) {
+mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type = c("simulated", "empirical"),
+                       rarefaction = FALSE, nsamp = NULL, nloc = NULL, nboot = 1000) {
 
     if (length(type) == 2) type <- type[1]
     if (length(data_type) == 2)data_type  <- data_type[1]
@@ -36,6 +39,13 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
     num_alleles_mean <- mean(num_alleles, na.rm = TRUE)
     num_alleles_sd <- stats::sd(num_alleles, na.rm = TRUE)
 
+    # with rarefaction
+
+    if(rarefaction == TRUE){
+        allelic_richness <- allele_rich(genotypes, nboot, nsamp, nloc)
+        num_alleles_mean <- allelic_richness[, 1]
+        num_alleles_sd <- allelic_richness[, 1]
+    }
    # AR <- num_alleles_mean / log(nrow(genotypes))
 
      # mean allele size variance across loci
@@ -64,7 +74,7 @@ mssumstats <- function(simd_data, type = c("microsimr", "microsats"), data_type 
         # mratio_sd <- stats::sd(mratio, na.rm = TRUE)
         #
         # allel_rich <- NA
-        mratio <- mRatio(g_types_geno, by.strata = FALSE, rpt.size = 1)
+        mratio <- strataG::mRatio(g_types_geno, by.strata = FALSE, rpt.size = 1)
         mratio_mean <- mean(mratio, na.rm = TRUE)
         mratio_sd <- stats::sd(mratio, na.rm = TRUE)
     } else if (data_type == "empirical") {
