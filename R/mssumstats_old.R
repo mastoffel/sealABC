@@ -14,6 +14,7 @@
 #' data(microsimr_data)
 #' mssumstats(microsimr_data)
 #'
+#' data(microsat_data)
 #'
 #'
 #'
