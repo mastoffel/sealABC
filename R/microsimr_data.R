@@ -1,5 +1,6 @@
 #' simulated microsatellite data from microsimr
 #'
-
-
-"microsimr_data"
+#'
+#' @keywords datasets
+#' @name microsimr_data
+NULL

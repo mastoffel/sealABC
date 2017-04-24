@@ -7,6 +7,7 @@
 #' but maximises the amount of information used for non-optimally scored microsatellite datasets.
 #'
 #' @param gtypes_geno microsatellite genotypes formatted as gtypes object with strataG
+#' @param rpt_size The size of potential repetitive units in a microsatellite. Default is from 8 to 2.
 #'
 #'
 #' @export

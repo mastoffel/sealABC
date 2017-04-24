@@ -6,17 +6,14 @@
 #' @param nloc number of loci to resample, usually is smaller than the number of loci of the population with
 #' the fewest loci
 #'
-#' @example
-#'
+#' @examples
 #' data(microsat_data)
-#' out <- allele_rich(microsat_data, nboot = 100, nsamp = 10, nloc = 5)
+#' out <- allele_rich(microsat_data, nboot = 5, nsamp = 5, nloc = 5)
 #' out
 #'
 #' @export
 #'
 #'
-
-
 
 
 allele_rich <- function(genotypes, nboot = 1000, nsamp = NULL, nloc = NULL){
