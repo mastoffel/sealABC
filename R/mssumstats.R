@@ -79,7 +79,7 @@ mssumstats <- function(data, datatype = c("microsats", "microsimr"), by_pop = NU
         # }
         # AR <- num_alleles_mean / log(nrow(genotypes))
 
-        if (datatype == "microsimr") {
+        if (datatype == "microsats") {
             # for empirical data (with repeat sizes being not 1 as in the simulated microsimr data)
             # find the most common repeat size per locus
             rpt_size <- 2:8
@@ -103,7 +103,7 @@ mssumstats <- function(data, datatype = c("microsats", "microsimr"), by_pop = NU
             }
             repeat_size_per_locus <- as.numeric(lapply(allele_size_diffs, find_repeat_size, rpt_size))
 
-        } else {
+        } else if (datatype == "microsimr") {
             repeat_size_per_locus <- 1 # for microsimr data
         }
 
@@ -140,7 +140,9 @@ mssumstats <- function(data, datatype = c("microsats", "microsimr"), by_pop = NU
 
         # measure similar to mRatio
         if (mratio == "strict") {
-            mratio <- strataG::mRatio(g_types_geno, by.strata = FALSE, rpt.size = 1)
+            rpt_size <- 8:2
+            if (datatype == "microsimr") rpt_size <- 1
+            mratio <- strataG::mRatio(g_types_geno, by.strata = FALSE, rpt.size = rpt_size)
             mratio_mean <- mean(mratio, na.rm = TRUE)
             mratio_sd <- stats::sd(mratio, na.rm = TRUE)
         } else if (mratio == "loose") {
@@ -158,7 +160,8 @@ mssumstats <- function(data, datatype = c("microsats", "microsimr"), by_pop = NU
 
         # calculate proportion fo low frequency alleles for one locus
         prop_low_af <- function(afs){
-            low_afs <- (afs[, "freq"] / sum(afs[, "freq"])) < 0.05
+            # low_afs <- (afs[, "freq"] / sum(afs[, "freq"])) < 0.05
+            low_afs <- afs[, "prop"] < 0.05
             prop_low <- sum(low_afs) / length(low_afs)
         }
         # and mean for all
