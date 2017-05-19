@@ -23,8 +23,6 @@
 mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
     mratio = c("strict", "loose"), rarefaction = FALSE, nresamp = 1000, nind = NULL, nloc = NULL) {
 
-    # default to microsats
-    if (length(datatype) == 2) datatype <- datatype[1]
     # define how to calculate MRatio
     if (length(mratio) == 2) mratio  <- mratio[1]
     # start of actual genotypes
