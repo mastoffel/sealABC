@@ -11,16 +11,17 @@
 #'
 #' @examples
 #'
+#' data(microsat_data)
+#' mssumstats(microsat_data, datatype = "microsats")
 #'
 #' data(fur_seal)
-#' mssumstats(fur_seal, by_pop = "pop", start_geno = 4, mratio = "loose", rarefaction = TRUE,
-#' nresamp = 10, nind = 20, nloc = 5)
+#' mssumstats(fur_seal, datatype = "microsats", by_pop = "pop", start_geno = 4)
 #'
 #' @export
 #'
 #'
 
-mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
+mssumstats_new <- function(data, by_pop = NULL, start_geno = NULL,
     mratio = c("strict", "loose"), rarefaction = FALSE, nresamp = 1000, nind = NULL, nloc = NULL) {
 
     # default to microsats
@@ -170,8 +171,6 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
             all_sumstats <- lapply(all_pops, function(x)  calculate_sumstats(genotypes[genotypes[[by_pop]] == x, start_geno:ncol(genotypes)]))
             out <- as.data.frame(do.call(rbind, all_sumstats))
         }
-
-        row.names(out) <- all_pops
     }
     # summary statistics for the full dataset
     if (is.null(by_pop)){
@@ -183,7 +182,5 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
         }
 
     }
-
-    out
 
 }
