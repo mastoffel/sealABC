@@ -24,7 +24,7 @@
 #'
 #'
 
-mssumstats <- function(data, datatype = c("microsats", "microsimr"), by_pop = NULL, start_geno = NULL,
+mssumstats_old3 <- function(data, datatype = c("microsats", "microsimr"), by_pop = NULL, start_geno = NULL,
     mratio = c("strict", "loose"), rarefaction = FALSE, nsamp = NULL, nloc = NULL, nboot = 1000) {
 
     # default to microsimr
