@@ -47,7 +47,7 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
         # exp_het
         exp_het <- strataG::exptdHet(g_types_geno)
         exp_het_mean <- mean(exp_het, na.rm = TRUE)
-        exp_het_sd <- mean(exp_het, na.rm = TRUE)
+        exp_het_sd <- sd(exp_het, na.rm = TRUE)
         # obs_het
         obs_het <- strataG::obsvdHet(g_types_geno)
         obs_het_mean <- mean(obs_het, na.rm = TRUE)
@@ -93,11 +93,11 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
         allele_range <- unlist(lapply(afs, function(x) diff(range(as.numeric(row.names(x))))))
         mean_allele_range <- mean(allele_range / repeat_size_per_locus, na.rm = TRUE)
         sd_allele_range <- sd(allele_range / repeat_size_per_locus, na.rm = TRUE)
+
         # allele size variance
         allele_size_sd <- unlist(lapply(afs, function(x) sd(as.numeric(row.names(x)), na.rm = TRUE)))
         mean_allele_size_sd <- mean(allele_size_sd / repeat_size_per_locus, na.rm = TRUE)
         sd_allele_size_sd <- sd(allele_size_sd / repeat_size_per_locus, na.rm = TRUE)
-
 
         # measure similar to mRatio
         if (mratio == "strict") {
