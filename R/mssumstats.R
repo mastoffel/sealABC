@@ -94,10 +94,22 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
         mean_allele_range <- mean(allele_range / repeat_size_per_locus, na.rm = TRUE)
         sd_allele_range <- sd(allele_range / repeat_size_per_locus, na.rm = TRUE)
 
-        # allele size variance
-        allele_size_sd <- unlist(lapply(afs, function(x) sd(as.numeric(row.names(x)), na.rm = TRUE)))
-        mean_allele_size_sd <- mean(allele_size_sd / repeat_size_per_locus, na.rm = TRUE)
-        sd_allele_size_sd <- sd(allele_size_sd / repeat_size_per_locus, na.rm = TRUE)
+        # allele size variance and kurtosis
+        # create vector of all alleles per locus
+        all_alleles <- function(afs_element){
+            alleles <- as.numeric(rep(row.names(afs_element), as.numeric(afs_element[, "freq"])))
+            size_sd <- stats::sd(alleles)
+            size_kurtosis <- moments::kurtosis(alleles, na.rm = TRUE)
+            out <- data.frame(size_sd = size_sd, size_kurtosis = size_kurtosis)
+        }
+        all_allele_size_ss <- do.call(rbind, lapply(afs, all_alleles))
+
+        mean_allele_size_sd <- mean(all_allele_size_ss$size_sd / repeat_size_per_locus, na.rm = TRUE)
+        sd_allele_size_sd <- sd(all_allele_size_ss$size_sd / repeat_size_per_locus, na.rm = TRUE)
+
+        mean_allele_size_kurtosis <- mean(all_allele_size_ss$size_kurtosis, na.rm = TRUE)
+        sd_allele_size_kurtosis <- sd(all_allele_size_ss$size_kurtosis, na.rm = TRUE)
+
 
         # measure similar to mRatio
         if (mratio == "strict") {
@@ -119,6 +131,7 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
             exp_het_mean, exp_het_sd,
             obs_het_mean, obs_het_sd,
             mean_allele_size_sd, sd_allele_size_sd,
+            mean_allele_size_kurtosis, sd_allele_size_kurtosis,
             mean_allele_range, sd_allele_range,
             mratio_mean, mratio_sd,
             prop_low_afs_mean,  prop_low_afs_sd)
