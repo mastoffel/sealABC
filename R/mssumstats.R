@@ -13,7 +13,7 @@
 #'
 #'
 #' data(fur_seal)
-#' mssumstats(fur_seal, by_pop = "pop", start_geno = 4, mratio = "loose", rarefaction = TRUE,
+#' out <- mssumstats(fur_seal, by_pop = "pop", start_geno = 4, mratio = "loose", rarefaction = TRUE,
 #' nresamp = 10, nind = 20, nloc = 5)
 #'
 #' @export
@@ -172,7 +172,11 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
         # list all populations (or clusters or whatever)
         all_pops <- names(table(genotypes[[by_pop]]))
         # delete populations with just one individual from the list
-        all_pops <- all_pops[-(which(as.numeric(table(genotypes[[by_pop]])) == 1))]
+        # any pops with one ind??
+        one_ind_pop <- any(as.numeric(table(genotypes[[by_pop]])) == 1)
+        if (one_ind_pop) {
+            all_pops <- all_pops[-(which(as.numeric(table(genotypes[[by_pop]])) == 1))]
+        }
 
         if (rarefaction == TRUE){
             all_sumstats <- lapply(all_pops, function(x)  calc_ss_with_rarefaction(genotypes[genotypes[[by_pop]] == x, start_geno:ncol(genotypes)], nresamp, nind, nloc))
