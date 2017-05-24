@@ -172,8 +172,8 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
         # list all populations (or clusters or whatever)
         all_pops <- names(table(genotypes[[by_pop]]))
         # delete populations with just one individual from the list
-        # any pops with one ind??
-        one_ind_pop <- any(as.numeric(table(genotypes[[by_pop]])) == 1)
+        # discard clusters with few individuals
+        one_ind_pop <- any(as.numeric(table(genotypes[[by_pop]])) <= 10)
         if (one_ind_pop) {
             all_pops <- all_pops[-(which(as.numeric(table(genotypes[[by_pop]])) == 1))]
         }
