@@ -58,7 +58,7 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
         # prop low frequency alleles
         prop_low_af <- function(afs){
             # low_afs <- (afs[, "freq"] / sum(afs[, "freq"])) < 0.05
-            low_afs <- afs[, "prop"] < 0.05
+            low_afs <- afs[, "prop"] <= 0.05
             prop_low <- sum(low_afs) / length(low_afs)
         }
         # and mean/sd for all
