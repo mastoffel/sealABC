@@ -4,7 +4,7 @@
 #' @param by_pop name of population variable. If specified, all summary statistics will be calculated within populations
 #' @param start_geno integer, specifying the first column with genotypes. If now specified, all column are expected to be genotypes
 #' @param mratio defaults to "strict". if "loose", the mratio will be calculated differently, see ?m_ratio
-#' @param rarefaction if TRUE, calculates mean and sd number of alleles as mean of n_samp individuals and n_loc loci over n_boot bootstraps
+#' @param rarefaction if TRUE, calculates mean and sd number of alleles as mean of n_samp individuals and n_loc loci over nresamp bootstraps
 #' @param nsamp number of samples to subssample
 #' @param nloc number of loci to subsample
 #' @param nboot number of bootstraps
@@ -179,7 +179,8 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
         }
 
         if (rarefaction == TRUE){
-            all_sumstats <- lapply(all_pops, function(x)  calc_ss_with_rarefaction(genotypes[genotypes[[by_pop]] == x, start_geno:ncol(genotypes)], nresamp, nind, nloc))
+            all_sumstats <- lapply(all_pops, function(x)  calc_ss_with_rarefaction(genotypes[genotypes[[by_pop]] == x,
+                                                          start_geno:ncol(genotypes)], nresamp, nind, nloc))
             out <- as.data.frame(do.call(rbind, all_sumstats))
         } else if (rarefaction == FALSE){
             all_sumstats <- lapply(all_pops, function(x)  calculate_sumstats(genotypes[genotypes[[by_pop]] == x, start_geno:ncol(genotypes)]))
