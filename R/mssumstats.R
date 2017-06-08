@@ -125,6 +125,8 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
         } else {
             stop("specify whether mratio is calculated strict or loose ")
         }
+        # mratio might be larger than 1 in "loose"
+        if (mratio_mean > 1) mratio_mean <- 1
 
         out <- data.frame(
             num_alleles_mean, num_alleles_sd,
