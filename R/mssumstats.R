@@ -1,4 +1,4 @@
-#' Calculates several summary statistics from biallelic microsats
+#' Calculates several summary statistics from microsats
 #'
 #' @param data microsatellites, whereby every locus is represented by two adjacent columns. Or a gtypes object from strataG
 #' @param by_pop name of population variable. If specified, all summary statistics will be calculated within populations
@@ -159,11 +159,23 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
         out <- calculate_sumstats(geno[sample_inds, full_sample_locs])
     }
 
+    # CI function
+    CI <- 0.95
+    calc_CI <- function(x) {
+        out <- stats::quantile(x, c((1 - CI)/2, 1 - (1 - CI)/2), na.rm = TRUE)
+        names(out) <- c("CIlow", "CIhigh")
+        out <- data.frame(t(out))
+    }
+
     # draw nresamp times nind individuals and nloc loci from the genotypes and recalculate summary stats
     calc_ss_with_rarefaction <- function(geno, nresamp, nind, nloc){
         all_rarefac_sumstats <- lapply(1:nresamp, single_rarefaction, geno, nind, nloc)
         all_rarefac_df <- do.call(rbind, all_rarefac_sumstats)
-        out <- as.data.frame(lapply(all_rarefac_df, mean, na.rm = TRUE))
+       #  out <- as.data.frame(lapply(all_rarefac_df, mean, na.rm = TRUE)) # old calculation without CI
+        out <- as.data.frame(lapply(all_rarefac_df, function(x) out <- data.frame("PE" = mean(x), calc_CI(x))))
+                                                        # out <- c("PE" = mean(x), calc_CI(x))))
+        names(out) <- gsub(".PE", "", names(out))
+        out
     }
 
 
