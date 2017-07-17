@@ -2,7 +2,7 @@
 % Please edit documentation in R/mssumstats.R
 \name{mssumstats}
 \alias{mssumstats}
-\title{Calculates several summary statistics from biallelic microsats}
+\title{Calculates several summary statistics from microsats}
 \usage{
 mssumstats(data, by_pop = NULL, start_geno = NULL, mratio = c("strict",
   "loose"), rarefaction = FALSE, nresamp = 1000, nind = NULL,
@@ -17,7 +17,7 @@ mssumstats(data, by_pop = NULL, start_geno = NULL, mratio = c("strict",
 
 \item{mratio}{defaults to "strict". if "loose", the mratio will be calculated differently, see ?m_ratio}
 
-\item{rarefaction}{if TRUE, calculates mean and sd number of alleles as mean of n_samp individuals and n_loc loci over n_boot bootstraps}
+\item{rarefaction}{if TRUE, calculates mean and sd number of alleles as mean of n_samp individuals and n_loc loci over nresamp bootstraps}
 
 \item{nloc}{number of loci to subsample}
 
@@ -26,14 +26,13 @@ mssumstats(data, by_pop = NULL, start_geno = NULL, mratio = c("strict",
 \item{nboot}{number of bootstraps}
 }
 \description{
-Calculates several summary statistics from biallelic microsats
+Calculates several summary statistics from microsats
 }
 \examples{
 
 
 data(fur_seal)
-mssumstats(fur_seal, by_pop = "pop", start_geno = 4, mratio = "loose", rarefaction = TRUE,
+out <- mssumstats(fur_seal, by_pop = "pop", start_geno = 4, mratio = "loose", rarefaction = TRUE,
 nresamp = 10, nind = 20, nloc = 5)
 
 }
-

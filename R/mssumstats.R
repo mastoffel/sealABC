@@ -54,7 +54,10 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
         obs_het_sd <- sd(obs_het, na.rm = TRUE)
 
         # allele frequencies
-        afs <- strataG::alleleFreqs(g_types_geno)
+        afs <- strataG::alleleFreqs(g_types_geno, by.strata = FALSE)
+        # in case anything is NA
+        if (any(is.na(names(afs)))) afs <- afs[-which(is.na(names(afs)))]
+
         # prop low frequency alleles
         prop_low_af <- function(afs){
             # low_afs <- (afs[, "freq"] / sum(afs[, "freq"])) < 0.05
@@ -88,11 +91,14 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
             r <- rpt_size[which.max(rowSums(all_possible))]
         }
         repeat_size_per_locus <- as.numeric(lapply(allele_size_diffs, find_repeat_size, rpt_size))
-
         # allele range
-        allele_range <- unlist(lapply(afs, function(x) diff(range(as.numeric(row.names(x))))))
-        mean_allele_range <- mean(allele_range / repeat_size_per_locus, na.rm = TRUE)
-        sd_allele_range <- sd(allele_range / repeat_size_per_locus, na.rm = TRUE)
+        allele_range <- unlist(lapply(afs, function(x) diff(range(as.numeric(row.names(x))), na.rm = TRUE)))
+        # delete loci where range is 0
+        to_keep <- !(allele_range < 2)
+        allele_range <- allele_range[ to_keep ]
+        rep_per_loc <- repeat_size_per_locus[ to_keep ]
+        mean_allele_range <- mean(allele_range /   rep_per_loc, na.rm = TRUE)
+        sd_allele_range <- sd(allele_range /   rep_per_loc, na.rm = TRUE)
 
         # allele size variance and kurtosis
         # create vector of all alleles per locus
@@ -121,12 +127,14 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
             mratio_all <- m_ratio(g_types_geno)
             # mratio <- mratio[mratio != 1] # not sure if makes sense
             mratio_mean <- mean(mratio_all, na.rm = TRUE)
-            mratio_sd <- stats::sd(mratio_all, na.rm = TRUE)
+            mratio_sd <- NA
+            if (!is.na(mratio_mean))  mratio_sd <- stats::sd(mratio_all, na.rm = TRUE)
+
         } else {
             stop("specify whether mratio is calculated strict or loose ")
         }
         # mratio might be larger than 1 in "loose"
-        if (mratio_mean > 1) mratio_mean <- 1
+        if (!is.na(mratio_mean) & mratio_mean > 1) mratio_mean <- 1
 
         out <- data.frame(
             num_alleles_mean, num_alleles_sd,

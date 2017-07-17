@@ -13,4 +13,3 @@ read_excel_sheets(data_path)
 loads multiple data frames into list from xlsx and assigns the
 tab names from the spreadsheet to the list elements
 }
-

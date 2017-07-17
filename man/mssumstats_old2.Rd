@@ -43,4 +43,3 @@ mssumstats(fur_seal, type = "microsats", by_pop = "pop", start_geno = 4,
            data_type = "empirical")
 
 }
-

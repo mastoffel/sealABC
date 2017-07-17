@@ -24,4 +24,3 @@ be kept for the formatting.
 Emily Humble (emily.lhumble@gmail.com)
          Martin Stoffel (martin.adam.stoffel@gmail.com)
 }
-

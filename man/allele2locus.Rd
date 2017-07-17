@@ -22,4 +22,3 @@ with a given separator.
 \author{
 Martin Stoffel (martin.adam.stoffel@gmail.com)
 }
-

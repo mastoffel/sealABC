@@ -25,4 +25,3 @@ out <- allele_rich(microsat_data, nboot = 5, nsamp = 5, nloc = 5)
 out
 
 }
-

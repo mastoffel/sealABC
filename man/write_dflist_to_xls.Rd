@@ -14,4 +14,3 @@ write_dflist_to_xls(dflist, file_name)
 \description{
 takes list of named data.frames and writes to xls with respective names as sheet names
 }
-

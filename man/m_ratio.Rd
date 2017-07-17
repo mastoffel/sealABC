@@ -18,4 +18,3 @@ the same repeat length for all alleles within a locus, it calculates the m-ratio
 the allele-range by the repeat lengths that is most common. Is is therefore an approximation
 but maximises the amount of information used for non-optimally scored microsatellite datasets.
 }
-

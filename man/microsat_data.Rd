@@ -2,6 +2,7 @@
 % Please edit documentation in R/fur_seal.R, R/microsat_data.R
 \name{microsat_data}
 \alias{microsat_data}
+\alias{microsat_data}
 \title{fur seal microsatellite data}
 \description{
 fur seal microsatellite data
@@ -9,4 +10,3 @@ fur seal microsatellite data
 microsatellite data
 }
 \keyword{datasets}
-

@@ -75,6 +75,9 @@ m_ratio <- function(gtypes_geno, rpt_size = 8:2){
         }
     }
     freqs <- strataG::alleleFreqs(gtypes_geno, by.strata = FALSE)
+    # in case anything is NA
+    if (any(is.na(names( freqs))))  freqs <-  freqs[-which(is.na(names(freqs)))]
+
     out <- sapply(freqs, calc_mratio)
 
 }
