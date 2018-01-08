@@ -179,9 +179,8 @@ mssumstats <- function(data, by_pop = NULL, start_geno = NULL,
     calc_ss_with_rarefaction <- function(geno, nresamp, nind, nloc){
         all_rarefac_sumstats <- lapply(1:nresamp, single_rarefaction, geno, nind, nloc)
         all_rarefac_df <- do.call(rbind, all_rarefac_sumstats)
-       #  out <- as.data.frame(lapply(all_rarefac_df, mean, na.rm = TRUE)) # old calculation without CI
-        out <- as.data.frame(lapply(all_rarefac_df, function(x) out <- data.frame("PE" = mean(x), calc_CI(x))))
-                                                        # out <- c("PE" = mean(x), calc_CI(x))))
+        out <- as.data.frame(lapply(all_rarefac_df, function(x) out <- data.frame("PE" = mean(x, na.rm = TRUE), calc_CI(x))))
+                                          # out <- c("PE" = mean(x), calc_CI(x))))
         names(out) <- gsub(".PE", "", names(out))
         out
     }
